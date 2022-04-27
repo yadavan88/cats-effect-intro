@@ -1,2 +1,4 @@
-# cats-effect-intro
-An introduction to Cats Effect 3.
+# Introduction to Cats-Effect 3
+
+Detailed blog is available [here](https://yadukrishnan.live).
+
