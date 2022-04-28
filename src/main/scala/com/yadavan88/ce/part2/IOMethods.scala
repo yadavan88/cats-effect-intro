@@ -2,6 +2,7 @@ package com.yadavan88.ce.part2
 
 import cats.effect.IOApp
 import cats.effect.IO
+import scala.concurrent.duration._
 
 object IOMethods extends IOApp.Simple {
 
@@ -46,5 +47,8 @@ object IOMethods extends IOApp.Simple {
 
   val anotherCombinator: IO[String] = firstIO >> secondIO
 
-  override def run: IO[Unit] = redeemedIO.map(println)
+  val sleepingIO = IO.sleep(100.millis)
+  val neverEndingIO = IO.println("Start") >> IO.never >> IO.println("Done")
+
+  override def run: IO[Unit] = neverEndingIO
 }
