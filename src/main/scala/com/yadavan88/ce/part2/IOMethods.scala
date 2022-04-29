@@ -49,6 +49,9 @@ object IOMethods extends IOApp.Simple {
 
   val sleepingIO = IO.sleep(100.millis)
   val neverEndingIO = IO.println("Start") >> IO.never >> IO.println("Done")
+  
+  lazy val aFuture: Future[Int] = Future(100)
+  val ioFromFuture: IO[Int] = IO.fromFuture(IO(aFuture))
 
   override def run: IO[Unit] = neverEndingIO
 }
