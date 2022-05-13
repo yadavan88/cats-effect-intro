@@ -3,6 +3,7 @@ package com.yadavan88.ce.part2
 import cats.effect.IOApp
 import cats.effect.IO
 import scala.concurrent.duration._
+import scala.concurrent.Future
 
 object IOMethods extends IOApp.Simple {
 
@@ -50,6 +51,7 @@ object IOMethods extends IOApp.Simple {
   val sleepingIO = IO.sleep(100.millis)
   val neverEndingIO = IO.println("Start") >> IO.never >> IO.println("Done")
   
+  import scala.concurrent.ExecutionContext.Implicits.global
   lazy val aFuture: Future[Int] = Future(100)
   val ioFromFuture: IO[Int] = IO.fromFuture(IO(aFuture))
 
