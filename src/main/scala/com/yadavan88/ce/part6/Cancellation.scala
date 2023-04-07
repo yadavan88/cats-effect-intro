@@ -71,10 +71,11 @@ object Cancellation extends IOApp.Simple {
     _ <- fib.join
   } yield ()
 
-
   val fullUncancelable = importantTask.uncancelable
 
-  val maskBlocks = IO.uncancelable(unmask => unmask(IO("Step1")) >> IO("Step2") >> unmask(IO("Step3")))
+  val maskBlocks = IO.uncancelable(unmask =>
+    unmask(IO("Step1")) >> IO("Step2") >> unmask(IO("Step3"))
+  )
 
   override def run: IO[Unit] = tryCancel.void
 }

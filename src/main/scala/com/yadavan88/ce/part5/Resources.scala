@@ -41,16 +41,23 @@ object ResourceHandling extends IOApp.Simple {
   val fileProcessingWithFailure: IO[String] =
     fileIO.bracket(src => failedProcessingIO(src))(src => closeSource(src))
 
-  val bracketWithCase: IO[String] = fileIO.bracketCase(src => failedProcessingIO(src))((src, outcome) =>
-    outcome match {
-      case Succeeded(s) =>
-        IO("[Bracket Case] successfully processed the resource").trace >> closeSource(src) >> IO.unit
-      case Errored(s) =>
-        IO("[Bracket Case] Failed while processing").trace >> closeSource(src) >> IO.unit
-      case Canceled() =>
-        IO("[Bracket Case] Canceled the execution").trace >> closeSource(src) >> IO.unit
-    }
-  )
+  val bracketWithCase: IO[String] =
+    fileIO.bracketCase(src => failedProcessingIO(src))((src, outcome) =>
+      outcome match {
+        case Succeeded(s) =>
+          IO(
+            "[Bracket Case] successfully processed the resource"
+          ).trace >> closeSource(src) >> IO.unit
+        case Errored(s) =>
+          IO("[Bracket Case] Failed while processing").trace >> closeSource(
+            src
+          ) >> IO.unit
+        case Canceled() =>
+          IO("[Bracket Case] Canceled the execution").trace >> closeSource(
+            src
+          ) >> IO.unit
+      }
+    )
   // using Resource for handling files
   val resource: Resource[IO, Source] =
     Resource.make(getSource(fileName))(src => closeSource(src))
