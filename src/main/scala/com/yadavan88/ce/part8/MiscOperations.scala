@@ -52,9 +52,11 @@ object BlockingOperations extends IOApp.Simple {
   }
 
   val simpleIO = IO("Hello World!")
-  val attemptedIO: IO[Either[Throwable, String]] = simpleIO.attempt // becomes Right
+  val attemptedIO: IO[Either[Throwable, String]] =
+    simpleIO.attempt // becomes Right
   val faiureIO = IO.raiseError[String](new Exception("Some exception"))
-  val attemptedFailureIOn: IO[Either[Throwable, String]] = faiureIO.attempt // becomes Left
+  val attemptedFailureIOn: IO[Either[Throwable, String]] =
+    faiureIO.attempt // becomes Left
 
   override def run: IO[Unit] = attemptedFailureIOn.trace.void
 }

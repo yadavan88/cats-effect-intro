@@ -39,7 +39,8 @@ object Fibers extends IOApp.Simple {
     }
   } yield ()
 
-  val ioWithHook = io.onCancel(IO("Finaliser for IO Fiber cancellation executed").trace.void)
+  val ioWithHook =
+    io.onCancel(IO("Finaliser for IO Fiber cancellation executed").trace.void)
   val fiberCancellationV2 = for {
     fiber <- ioWithHook.start
     _ <- IO.sleep(100.millis) >> fiber.cancel

@@ -84,11 +84,15 @@ object ConcurrentSync extends IOApp.Simple {
   } yield ()
 
   def currentTime = LocalDateTime.now
- 
+
   def accessWashroom(person: String, sem: Semaphore[IO]): IO[Unit] = for {
-    _ <- IO(s"[$currentTime] $person wants to access the washroom, waiting for getting the access").trace
+    _ <- IO(
+      s"[$currentTime] $person wants to access the washroom, waiting for getting the access"
+    ).trace
     _ <- sem.acquire
-    _ <- IO(s"[$currentTime] $person got access to washroom and using it now").trace
+    _ <- IO(
+      s"[$currentTime] $person got access to washroom and using it now"
+    ).trace
     _ <- IO.sleep(5.second)
     _ <- IO(s"[$currentTime] $person left the washroom").trace
     _ <- sem.release
@@ -109,11 +113,17 @@ object ConcurrentSync extends IOApp.Simple {
 
   def getApprovals(approvals: CountDownLatch[IO]) = for {
     _ <- IO("Requesting approvals for safe access").trace
-    _ <- IO("Officer 1 Approval in progress").trace >> IO.sleep(Random.between(500, 1500).millis) >> IO("Officer 1 Approved").trace
+    _ <- IO("Officer 1 Approval in progress").trace >> IO.sleep(
+      Random.between(500, 1500).millis
+    ) >> IO("Officer 1 Approved").trace
     _ <- approvals.release
-    _ <- IO("Officer 2 Approval in progress").trace >> IO.sleep(Random.between(500, 1500).millis) >> IO("Officer 2 Approved").trace
+    _ <- IO("Officer 2 Approval in progress").trace >> IO.sleep(
+      Random.between(500, 1500).millis
+    ) >> IO("Officer 2 Approved").trace
     _ <- approvals.release
-    _ <- IO("Officer 3 Approval in progress").trace >> IO.sleep(Random.between(500, 1500).millis) >> IO("Officer 3 Approved").trace
+    _ <- IO("Officer 3 Approval in progress").trace >> IO.sleep(
+      Random.between(500, 1500).millis
+    ) >> IO("Officer 3 Approved").trace
     _ <- approvals.release
   } yield ()
 
@@ -124,28 +134,26 @@ object ConcurrentSync extends IOApp.Simple {
     _ <- fib.join
   } yield ()
 
-def participant1(barrier: CyclicBarrier[IO]) = for {
-_ <- IO("await invoked by participant 1").trace
-_ <- IO("Waiting for 2nd participant").trace
-_ <-  barrier.await
-_ <- IO("All participants ready, so now staring").trace
-} yield ()
+  def participant1(barrier: CyclicBarrier[IO]) = for {
+    _ <- IO("await invoked by participant 1").trace
+    _ <- IO("Waiting for 2nd participant").trace
+    _ <- barrier.await
+    _ <- IO("All participants ready, so now staring").trace
+  } yield ()
 
-def participant2(barrier: CyclicBarrier[IO]) = for {
-_ <- IO.sleep(1000.millis)
-_ <- IO("2nd participant joined").trace
-_ <-  barrier.await
-} yield ()
+  def participant2(barrier: CyclicBarrier[IO]) = for {
+    _ <- IO.sleep(1000.millis)
+    _ <- IO("2nd participant joined").trace
+    _ <- barrier.await
+  } yield ()
 
-val cyclicBarrierPgm = for {
-   cyclicBarrier <- CyclicBarrier[IO](2)
-   fib1 <- participant1(cyclicBarrier).start
-   fib2 <- participant2(cyclicBarrier).start
-   _ <- fib1.join
-   _ <- fib2.join
-} yield ()
-  
-
+  val cyclicBarrierPgm = for {
+    cyclicBarrier <- CyclicBarrier[IO](2)
+    fib1 <- participant1(cyclicBarrier).start
+    fib2 <- participant2(cyclicBarrier).start
+    _ <- fib1.join
+    _ <- fib2.join
+  } yield ()
 
   override def run: IO[Unit] = cyclicBarrierPgm
 }
