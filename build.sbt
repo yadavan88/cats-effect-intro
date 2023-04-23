@@ -10,5 +10,6 @@ lazy val root = (project in file(".")).settings(
   name := "cats-effect3-intro",
   libraryDependencies ++= Seq(
     "org.typelevel" %% "cats-effect" % "3.4.9"
+    "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test
   )
 )
