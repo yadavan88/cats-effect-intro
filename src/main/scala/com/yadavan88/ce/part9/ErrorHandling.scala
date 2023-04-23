@@ -20,8 +20,8 @@ object ErrorHandling extends IOApp.Simple {
     IO.println("It failed with message: " + ex.getMessage)
   )
 
-  val orElseResult1: IO[Int] = IO(100).orElse(IO(-1)) //returns IO(100)
-  val orElseResult2: IO[Int] = failedIO.orElse(IO(-1)) //returns IO(-1)
+  val orElseResult1: IO[Int] = IO(100).orElse(IO(-1)) // returns IO(100)
+  val orElseResult2: IO[Int] = failedIO.orElse(IO(-1)) // returns IO(-1)
 
   val attemptedIO: IO[Either[Throwable, Int]] = loggedFailedError.attempt
   val handledError = failedIO.handleError(ex => 500)
