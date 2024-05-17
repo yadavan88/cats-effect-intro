@@ -1,5 +1,5 @@
 ThisBuild / organization := "com.yadavan88"
-ThisBuild / scalaVersion := "3.4.1"
+ThisBuild / scalaVersion := "3.4.2"
 
 //disable scala 3 indentation syntax , i.e braces are mandatory
 scalacOptions ++= Seq(
