@@ -9,7 +9,7 @@ scalacOptions ++= Seq(
 lazy val root = (project in file(".")).settings(
   name := "cats-effect3-intro",
   libraryDependencies ++= Seq(
-    "org.typelevel" %% "cats-effect" % "3.5.5",
+    "org.typelevel" %% "cats-effect" % "3.5.6",
     "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test
   )
 )
